@@ -6,6 +6,7 @@
    * @polymerBehavior
    */
   Polymer.WidCardSubscriptionsBehavior = {
+    
     properties: {
       /**
        * Channels the card must subscribe for
@@ -13,8 +14,7 @@
        */
       subscriptions: {
         type: Array,
-        observer: '_subscriptionsChanged',
-        value: function () {
+        value: function value() {
           return [];
         }
       },
@@ -25,17 +25,29 @@
        */
       websockets: {
         type: Array,
-        value: function () {
+        value: function value() {
           return [];
         }
+      },
+
+      /**
+       * Authentification token
+       * @type {String}
+       */
+      token: {
+        type: String,
       }
     },
+
+    observers: [
+      '_subscriptionsChanged(subscriptions, token)'
+    ],
 
     /**
      * Each time the websocket receive some data. We bind it to the card model.
      * @param  {Event} e Event
      */
-    _onData: function (e) {
+    _onData: function _onData(e) {
       this[e.model.ws.key] = e.detail.data;
     },
 
@@ -43,16 +55,15 @@
      * Each time the subscriions change, we recompute the websockets configuration.
      * @param  {{value: String; key: String; type?: String}[]} newVal Subscriptions configuration
      */
-    _subscriptionsChanged: function (newVal) {
+    _subscriptionsChanged: function _subscriptionsChanged(newSubscritpions, newToken) {
 
-      for (let i = 0; i < newVal.length; i++) {
+      for (var i = 0; i < newSubscritpions.length; i++) {
         this.push('websockets', {
-          token: 'xxx',
-          subscription: newVal[i].value,
-          key: newVal[i].key
+          token: newToken,
+          subscription: newSubscritpions[i].value,
+          key: newSubscritpions[i].key
         });
       }
-
     }
 
   };
