@@ -6,7 +6,7 @@
    * @polymerBehavior
    */
   Polymer.WidCardSubscriptionsBehavior = {
-    
+
     properties: {
       /**
        * Channels the card must subscribe for
@@ -36,11 +36,19 @@
        */
       token: {
         type: String,
+      },
+
+      /**
+       * The server URL
+       * @type {String}
+       */
+      url: {
+        type: String
       }
     },
 
     observers: [
-      '_subscriptionsChanged(subscriptions, token)'
+      '_subscriptionsChanged(subscriptions, token, url)'
     ],
 
     /**
@@ -55,13 +63,14 @@
      * Each time the subscriions change, we recompute the websockets configuration.
      * @param  {{value: String; key: String; type?: String}[]} newVal Subscriptions configuration
      */
-    _subscriptionsChanged: function _subscriptionsChanged(newSubscritpions, newToken) {
+    _subscriptionsChanged: function _subscriptionsChanged(newSubscritpions, newToken, newUrl) {
 
       for (var i = 0; i < newSubscritpions.length; i++) {
         this.push('websockets', {
           token: newToken,
           subscription: newSubscritpions[i].value,
-          key: newSubscritpions[i].key
+          key: newSubscritpions[i].key,
+          url: newUrl
         });
       }
     }

@@ -35,10 +35,18 @@ Polymer.WidCardSubscriptionsBehavior = {
      */
     token: {
       type: String
+    },
+
+    /**
+     * The server URL
+     * @type {String}
+     */
+    url: {
+      type: String
     }
   },
 
-  observers: ['_subscriptionsChanged(subscriptions, token)'],
+  observers: ['_subscriptionsChanged(subscriptions, token, url)'],
 
   /**
    * Each time the websocket receive some data. We bind it to the card model.
@@ -52,13 +60,14 @@ Polymer.WidCardSubscriptionsBehavior = {
    * Each time the subscriions change, we recompute the websockets configuration.
    * @param  {{value: String; key: String; type?: String}[]} newVal Subscriptions configuration
    */
-  _subscriptionsChanged: function _subscriptionsChanged(newSubscritpions, newToken) {
+  _subscriptionsChanged: function _subscriptionsChanged(newSubscritpions, newToken, newUrl) {
 
     for (var i = 0; i < newSubscritpions.length; i++) {
       this.push('websockets', {
         token: newToken,
         subscription: newSubscritpions[i].value,
-        key: newSubscritpions[i].key
+        key: newSubscritpions[i].key,
+        url: newUrl
       });
     }
   }
